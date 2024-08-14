@@ -1,0 +1,23 @@
+.task-list-parent {
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 25%;
+  min-height: 20vh;
+  border: 2px solid black;
+  background-color: beige;
+}
+.task-list {
+}
+.task {
+  /* border: 2px solid brown; */
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+}
+.task-conntainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}

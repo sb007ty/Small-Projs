@@ -4,12 +4,14 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import PaginationComponent from "./projects/pagination/PaginationComponent";
 import StopWatch from "./projects/stopwatch/StopWatch";
+import Trello from "./projects/trello/Trello";
 
 function App() {
   return (
     <>
       {/* <PaginationComponent /> */}
-      <StopWatch />
+      {/* <StopWatch /> */}
+      <Trello />
     </>
   );
 }
