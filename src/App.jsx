@@ -5,13 +5,19 @@ import "./App.css";
 import PaginationComponent from "./projects/pagination/PaginationComponent";
 import StopWatch from "./projects/stopwatch/StopWatch";
 import Trello from "./projects/trello/Trello";
+import ThemeContext from "./projects/trello/ThemeProvider";
+import ThemeProvider from "./projects/trello/ThemeProvider";
+import Folder from "./projects/folderProj/Folder";
 
 function App() {
   return (
     <>
       {/* <PaginationComponent /> */}
       {/* <StopWatch /> */}
-      <Trello />
+      {/* <ThemeProvider>
+        <Trello />
+      </ThemeProvider> */}
+      <Folder />
     </>
   );
 }

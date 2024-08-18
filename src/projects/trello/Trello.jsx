@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import "./trello.css";
+import { ThemeContext } from "./ThemeProvider";
 
 function Trello() {
   const [taskList1, setTaskList1] = useState([]);
@@ -8,6 +9,7 @@ function Trello() {
   const [editObj, setEditObj] = useState(null);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("todo");
+  const { toggleTheme } = useContext(ThemeContext);
 
   console.log(taskList2, " task2");
   function addToDo() {
@@ -100,6 +102,13 @@ function Trello() {
   }
   return (
     <>
+      <button
+        onClick={(e) => {
+          toggleTheme();
+        }}
+      >
+        Toggle Theme
+      </button>
       <UserInput
         addToDo={addToDo}
         editObj={editObj}
@@ -158,8 +167,13 @@ function UserInput({
   editObj,
   submitEdit,
 }) {
+  const { theme } = useContext(ThemeContext);
+  let styleObj = { fontSize: "2rem" };
+  if (theme === "dark") {
+    styleObj = { fontSize: ".5rem", backgroundColor: "pink" };
+  }
   return (
-    <div>
+    <div style={styleObj}>
       <label htmlFor="task-name">Enter Task Name</label>
       <input
         type="text"
