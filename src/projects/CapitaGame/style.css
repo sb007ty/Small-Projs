@@ -1,0 +1,12 @@
+.normal {
+  border: "2px solid";
+}
+.selected {
+  border-color: blue;
+}
+.correct {
+  border-color: green;
+}
+.wrong {
+  border-color: red;
+}

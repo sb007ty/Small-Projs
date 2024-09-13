@@ -1,76 +1,48 @@
 import { useState, useRef } from "react";
-import finalData, { countries, DATA, getFinalDataWithColor } from "./data";
+import getFinalData from "./data";
+import "./style.css";
 
-const initalBorder = "2px solid black";
-const selectedBorder = "2px solid blue";
-const wrongBorder = "2px solid red";
-const rightBorder = "2px solid green";
-function CapitalGame() {
-  const [data, setData] = useState(finalData);
-  //   const divRef = useRef([]);
-  console.log(data, "data");
-  function placeClicked(e) {
-    console.log("div click");
-    const idSelected = e.target.id;
-    const placeSelected = data.find((item) => item.id === idSelected);
-    // divRef.current.push({ ...data[0] });
-    let country;
-    let capital;
-    console.log(placeSelected, "placese");
-    if (countries.includes(placeSelected.value)) {
-      console.log("hello");
-      country = { ...placeSelected };
-      capital = { ...data[0] };
-    } else {
-      country = { ...data[0] };
-      capital = { ...placeSelected };
+function CapitalGame({ data }) {
+  const [options, setOptions] = useState(getFinalData(data));
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const buttonClick = (e) => {
+    console.log(e.target.type);
+    const { target } = e;
+    if (e.target.tagName === "INPUT" && e.target.type === "button") {
+      const value = target.getAttribute("data-value");
+      const newSelection = options.find((item) => item.value === value);
+      const newSelected = [...selectedOptions, newSelection];
+      console.log(newSelected, "newS");
+      if (newSelected.length === 2) {
+        const data1 = newSelected[0];
+        const data2 = newSelected[1];
+        if (
+          data[data1.value] === data2.value ||
+          data[data2.value] === data1.value
+        ) {
+          const newOptions = options.filter(
+            (item) => item.value !== data1.value && item.value !== data2.value
+          );
+          setSelectedOptions(newSelected);
+          setTimeout(() => {
+            setSelectedOptions([]);
+            setOptions(newOptions);
+          }, 1000);
+        } else {
+          const newOptions = [...options];
+          setSelectedOptions(newSelected);
+          setTimeout(() => {
+            setSelectedOptions([]);
+            setOptions(newOptions);
+          }, 1000);
+        }
+      } else {
+        setSelectedOptions(newSelected);
+      }
     }
-    // const divRefVal = { ...divRef.current.pop() };
-    console.log(country, capital, "bro");
-    if (DATA[country.value] === capital.value) {
-      const filterData = data.filter((item) => {
-        if (item.id !== capital.id && item.id !== country.id)
-          return { ...item };
-      });
-      const oldData = filterData.map((item, index) => {
-        if (index === 0) {
-          //   divRef.current.push({ ...item, borderColor: "blue" });
-          return { ...item, borderColor: "blue" };
-        }
-        return { ...item, borderColor: "black" };
-      });
-      const newData = data.map((item) => {
-        if (item.id === capital.id || item.id === country.id) {
-          return { ...item, borderColor: "green" };
-        }
-        return { ...item };
-      });
-      setData(newData);
+  };
 
-      setTimeout(() => {
-        setData(oldData);
-      }, 1000);
-    } else {
-      const oldData = data.map((item, index) => {
-        if (index === 0) {
-          //   divRef.current.push({ ...item, borderColor: "blue" });
-          return { ...item, borderColor: "blue" };
-        }
-        return { ...item, borderColor: "black" };
-      });
-      const newData = data.map((item) => {
-        if (item.id === capital.id || item.id === country.id) {
-          return { ...item, borderColor: "red" };
-        }
-        return { ...item };
-      });
-      setData(newData);
-
-      setTimeout(() => {
-        setData(oldData);
-      }, 1000);
-    }
-  }
   return (
     <div
       style={{
@@ -80,8 +52,9 @@ function CapitalGame() {
         alignItems: "center",
         gap: "20px",
       }}
+      onClick={buttonClick}
     >
-      {data.length > 0 && (
+      {options.length > 0 && (
         <div
           style={{
             display: "flex",
@@ -93,33 +66,49 @@ function CapitalGame() {
             gap: "10px",
           }}
         >
-          {data.map((item) => (
-            <input
-              type="button"
-              key={item.id}
-              id={item.id}
-              style={{
-                padding: "10px",
-                minHeight: "50px",
-                borderRadius: "15px",
-                border: `2px solid ${item["borderColor"]}`, //why + not working
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={placeClicked}
-              value={item.value}
-            />
-          ))}
+          {options.map((item) => {
+            const { value } = item;
+            let borderClass = "normal";
+            const option = selectedOptions.find((item) => value === item.value);
+            if (option) {
+              if (selectedOptions.length === 1) {
+                borderClass += " selected";
+              } else if (selectedOptions.length === 2) {
+                const isSelected =
+                  data[selectedOptions[0].value] === selectedOptions[1].value ||
+                  data[selectedOptions[1].value] === selectedOptions[0].value;
+                if (isSelected) borderClass += " correct";
+                else borderClass += " wrong";
+              }
+            }
+
+            return (
+              <input
+                type="button"
+                key={item.value}
+                data-value={item.value}
+                style={{
+                  padding: "10px",
+                  minHeight: "50px",
+                  borderRadius: "15px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                className={borderClass}
+                value={item.value}
+              />
+            );
+          })}
         </div>
       )}
-      {data.length === 0 && (
+      {options.length === 0 && (
         <>
           <p>Congrats You won</p>
           <button
             onClick={(e) => {
-              setData(finalData);
+              setOptions(getFinalData(data));
               //   divRef.current = [];
             }}
           >
