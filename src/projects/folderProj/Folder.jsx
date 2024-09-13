@@ -35,7 +35,7 @@ const rootFolder = {
   children: [folder1, folder2, folder3, folder4],
   type: "folder",
 };
-console.log(rootFolder, "root*folder");
+// console.log(rootFolder, "root*folder");
 function Folder() {
   const [rootObj, setRootObj] = useState(rootFolder);
   console.log(rootObj, "rootOb*");
